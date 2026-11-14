@@ -10,7 +10,7 @@ spring:
   datasource:
     password: '***'
     driver-class-name: com.mysql.jdbc.Driver
-    username: '***'
+    username: 'root'
     url: jdbc:mysql://localhost:3306/orders?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect

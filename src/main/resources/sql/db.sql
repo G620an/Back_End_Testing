@@ -1,5 +1,3 @@
-create schema esercizi;
-use esercizi;
 
 create table Catalogo;
 use Catalogo;
@@ -13,15 +11,15 @@ create table Fornitore (
 
 create table Marca(
     id Integer auto_increment,
-    nome varchar(40),
-    città varchar(40),
+    nome varchar(40) not null,
+    città varchar(40) not null,
     primary key (id)
 );
 
 create table Merce(
     codice integer auto_increment,
-    nome varchar(40),
-    marca Integer,
+    nome varchar(40) not null,
+    marca Integer not null,
     primary key (codice),
     foreign key (marca) references Marca(id)
 );
