@@ -10,24 +10,18 @@ import java.util.List;
 @Entity
 @Table(name="Fornitura", schema="Catalogo")
 public class Fornitura {
-    @PrimaryKeyJoinColumn()
-    @ManyToMany(targetEntity = Fornitore.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "Fornitura",
-            joinColumns = @JoinColumn(name="fornitore"),
-            inverseJoinColumns = @JoinColumn(name="piva")
-    )
-    private List<Long> fornitori;
+    @EmbeddedId
+    private FornituraId id;
 
-    @PrimaryKeyJoinColumn()
-    @ManyToMany(targetEntity = Marca.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "Fornitura",
-            joinColumns = @JoinColumn(name="merce"),
-            inverseJoinColumns = @JoinColumn(name="codice")
-    )
-    private List<Long> merci;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="fornitore")
+    private Fornitore fornitore;
 
-    @Column(name="prezzo", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="merce")
+    private Merce merce;
+
+
+    @Column(name="prezzo", nullable = false, precision = 6, scale = 2)
     private double prezzo;
 }

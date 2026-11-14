@@ -24,7 +24,7 @@ public class Fornitore {
     @Column(name="città", nullable = false, length = 40)
     private String città;
 
-    @ManyToMany(mappedBy = "fornitori")
+    @OneToMany(mappedBy = "fornitori")
     @JsonIgnore
     @ToString.Exclude
     private List<Fornitura> forniture;
