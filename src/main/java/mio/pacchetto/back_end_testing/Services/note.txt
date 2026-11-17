@@ -1,0 +1,20 @@
+Per l'esame gestire in maniera esplicita in almeno un metodo i lock (ottimistici e pessimistici)
+
+
+  @Transactional(readOnly = false)
+    public Purchase addPurchase(Purchase purchase) throws QuantityProductUnavailableException {
+        Purchase result = purchaseRepository.save(purchase);
+        for ( ProductInPurchase pip : result.getProductsInPurchase() ) {
+            pip.setPurchase(result);
+            ProductInPurchase justAdded = productInPurchaseRepository.save(pip);
+            entityManager.refresh(justAdded);
+            Product product = justAdded.getProduct();
+            int newQuantity = product.getQuantity() - pip.getQuantity();
+            if ( newQuantity < 0 ) {
+                throw new QuantityProductUnavailableException();
+            }
+            product.setQuantity(newQuantity);
+            entityManager.refresh(pip);
+        }
+        entityManager.refresh(result);
+        return result;

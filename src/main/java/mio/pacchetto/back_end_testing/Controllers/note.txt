@@ -1,0 +1,31 @@
+
+    @GetMapping("/{user}/{startDate}/{endDate}")
+    public ResponseEntity getPurchasesInPeriod(@Valid @PathVariable("user") User user, @PathVariable("startDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date start, @PathVariable("endDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date end) {
+        try {
+            List<Purchase> result = purchasingService.getPurchasesByUserInPeriod(user, start, end);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(new ResponseMessage("No results!"), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK); //Posso restituire una lista di prodotti oppure con questo oggettino posso mettere al suo interno più cose
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found XXX!", e); //Questo dice all'utente quello che noi ritorneremo comn la return normale
+            //Non mettere il messaggino in maniera così USER_NOT_FOUND per tutte le scritte ; meglio questa forma per ipotizzare di avere sul client nel front end un dizionario che cambia in base alla localizzazione
+        } catch (DateWrongRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start date must be previous end date XXX!", e); //Messaggi per il client
+        }
+    }
+    //Non è giusto che passo l'identificativo, perchè non è sicuro posso rubare i dati basta che copio l url o scopro il suo ID
+    //Si risolverà con i meccanismi di login
+
+
+ @GetMapping("/{user}")
+    public List<Purchase> getPurchases(@RequestBody @Valid User user) { 
+        try {
+            return purchasingService.getPurchasesByUser(user);
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!", e);
+        }
+    }
+
+    //Ogni metodo del controller è così si chiama il metodo avvolto dai try catch sulla base
+    del mapping dei metodi HTTP
